@@ -6,6 +6,11 @@ require('../database/conexao.php');
 $idCategoria = $_GET['id'];
 
 $sql = "SELECT * FROM tbl_categoria WHERE id = $idCategoria";
+
+$resultado = mysqli_query($conexao, $sql);
+
+$categoria = mysqli_fetch_array($resultado);
+
 ?>
 
 <!DOCTYPE html>
@@ -55,7 +60,7 @@ $sql = "SELECT * FROM tbl_categoria WHERE id = $idCategoria";
 
                     <div class="input-group span2">
                         <label for="descricao">Descrição</label>
-                        <input type="text" name="descricao" id="descricao" />
+                        <input type="text" name="descricao" id="descricao" value="<?= $categoria["descricao"] ?>" />
                     </div>
                     <button type="button" onclick="javascript:window.location.href = '../categorias/'">Cancelar</button>
                     <button>Salvar</button>
