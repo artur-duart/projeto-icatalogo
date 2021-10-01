@@ -3,10 +3,9 @@ session_start();
 
 require('../database/conexao.php');
 
-$sql = "SELECT * FROM tbl_categoria";
+$idCategoria = $_GET['id'];
 
-$resultado = mysqli_query($conexao, $sql);
-
+$sql = "SELECT * FROM tbl_categoria WHERE id = $idCategoria";
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +17,7 @@ $resultado = mysqli_query($conexao, $sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles-global.css" />
     <link rel="stylesheet" href="./categorias.css" />
-    <title>Administrar Categorias</title>
+    <title>Editar Categorias</title>
 </head>
 
 <body>
@@ -30,7 +29,7 @@ $resultado = mysqli_query($conexao, $sql);
             <main>
                 <form class="form-categoria" method="POST" action="./acoes.php">
                     <input type="hidden" name="acao" value="inserir" />
-                    <h1 class="span2">Adicionar Categorias</h1>
+                    <h1 class="span2">Editar Categorias</h1>
 
                     <ul>
                         <?php
@@ -58,39 +57,12 @@ $resultado = mysqli_query($conexao, $sql);
                         <label for="descricao">Descrição</label>
                         <input type="text" name="descricao" id="descricao" />
                     </div>
-                    <button type="button" onclick="javascript:window.location.href = '../produtos/'">Cancelar</button>
+                    <button type="button" onclick="javascript:window.location.href = '../categorias/'">Cancelar</button>
                     <button>Salvar</button>
-                </form>
-
-                <h1>Lista de Categorias</h1>
-
-                <?php
-
-                while ($categoria = mysqli_fetch_array($resultado)) {
-
-                ?>
-
-                    <div class="card-categorias">
-                        <?= $categoria["descricao"] ?>
-                        <img onclick="javascript: window.location = 'editar.php?id=<?= $categoria['id'] ?>'" src="https://icons.veryicon.com/png/o/internet--web/three-body-project-icon/edit-60.png" />
-                        <img onclick="deletar(<?= $categoria['id'] ?>)" src="https://icons.veryicon.com/png/o/construction-tools/coca-design/delete-189.png" />
-                    </div>
-
-                <?php } ?>
-
-                <form id="form-deletar" method="POST" action="./acoes.php">
-                    <input type="hidden" name="acao" value="deletar" />
-                    <input type="hidden" id="categoriaId" name="categoriaId" value="" />
                 </form>
             </main>
         </section>
     </div>
-    <script lang="javascript">
-        function deletar(categoriaId) {
-            document.querySelector("#categoriaId").value = categoriaId;
-            document.querySelector("#form-deletar").submit();
-        }
-    </script>
 </body>
 
 </html>
