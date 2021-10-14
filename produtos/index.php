@@ -1,3 +1,17 @@
+<?php
+require('../database/conexao.php');
+
+$sql = "SELECT p.*, c.descricao FROM tbl_produto p
+    INNER JOIN tbl_categoria c ON
+    p.categoria_id = c.id;";
+
+$resultado = mysqli_query($conexao, $sql);
+
+// TESTE DE SELEÇÃO DE DADOS:
+// var_dump($resultado);
+// exit;
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -32,40 +46,62 @@
 
                 <!-- LISTAGEM DE PRODUTOS (INICIO) -->
 
-                <article class="card-produto">
+                <?php
 
-                    <div class="acoes-produtos">
-                        <img onclick="javascript: window.location = './editar/?id=<?= $produto['id'] ?>'" src="../imgs/edit.svg" />
-                        <img onclick="deletar(<?= $produto['id'] ?>)" src="../imgs/trash.svg" />
-                    </div>
+                while ($produto = mysqli_fetch_array($resultado)) {
 
-                    <figure>
-                        <img src="" />
-                    </figure>
+                    $valor = $produto["valor"];
+                    $desconto = $produto["desconto"];
 
-                    <section>
+                    $valorDesconto;
 
-                        <span class="preco">
-                            R$
-                            <em>% off</em>
-                        </span>
+                    if ($desconto > 0) {
 
-                        <span class="parcelamento">ou em
-                            <em>
-                                x R$ sem juros
-                            </em>
-                        </span>
+                        $valorDesconto = ($desconto / 100) * $valor;
 
-                        <span class="descricao"></span>
+                        $valor -= $valorDesconto;
+                    }
 
-                        <span class="categoria">
-                            <em></em>
-                        </span>
+                    $qtdParcelas = $valor > 1000 ? 12 : 6;
 
-                </article>
+                    $valorParcela = number_format($valor / $qtdParcelas, 2, ',', '.');
+                ?>
+
+                    <article class="card-produto">
+
+                        <div class="acoes-produtos">
+                            <img onclick="javascript: window.location = './editar/?id=<?= $produto['id'] ?>'" src="../imgs/edit.svg" />
+                            <img onclick="deletar(<?= $produto['id'] ?>)" src="../imgs/trash.svg" />
+                        </div>
+
+                        <figure>
+                            <img src="fotos/<?= $produto["imagem"] ?>" />
+                        </figure>
+
+                        <section>
+
+                            <span class="preco">
+                                R$<?= number_format($valor, 2, ',', '.') ?>
+                                <em><?= $desconto ?>% off</em>
+                            </span>
+
+                            <span class="parcelamento">ou em
+                                <em>
+                                    <?= $qtdParcelas ?>X de R$<?= $valorParcela ?> sem juros
+                                </em>
+                            </span>
+
+                            <span class="descricao"><?= $produto["1"] ?></span>
+
+                            <span class="categoria">
+                                <em><?= $produto["descricao"] ?></em>
+                            </span>
+
+                    </article>
+
+                <?php } ?>
 
         </section>
-
         <!-- LISTAGEM DE PRODUTOS (FIM) -->
 
         <!-- FORM USADO PARA A EXCLUSÃO DE PRODUTOS -->
