@@ -72,8 +72,10 @@ $resultado = mysqli_query($conexao, $sql);
 
                     <div class="card-categorias">
                         <?= $categoria["descricao"] ?>
-                        <img onclick="javascript: window.location = 'editar.php?id=<?= $categoria['id'] ?>'" src="https://icons.veryicon.com/png/o/internet--web/three-body-project-icon/edit-60.png" />
-                        <img onclick="deletar(<?= $categoria['id'] ?>)" src="https://icons.veryicon.com/png/o/construction-tools/coca-design/delete-189.png" />
+                        <div class="card-icones">
+                            <img onclick="javascript: window.location = 'editar.php?id=<?= $categoria['id'] ?>'" src="https://icons.veryicon.com/png/o/internet--web/three-body-project-icon/edit-60.png" />
+                            <img onclick="deletar(<?= $categoria['id'] ?>)" src="https://icons.veryicon.com/png/o/construction-tools/coca-design/delete-189.png" />
+                        </div>
                     </div>
 
                 <?php } ?>

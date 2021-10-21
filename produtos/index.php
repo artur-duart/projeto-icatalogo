@@ -1,15 +1,16 @@
 <?php
+
 require('../database/conexao.php');
 
 $sql = "SELECT p.*, c.descricao FROM tbl_produto p
-    INNER JOIN tbl_categoria c ON
-    p.categoria_id = c.id;";
+            INNER JOIN tbl_categoria c ON
+            p.categoria_id = c.id;";
 
 $resultado = mysqli_query($conexao, $sql);
 
-// TESTE DE SELEÇÃO DE DADOS:
-// var_dump($resultado);
-// exit;
+//TESTE DE SELEÇÃO DE DADOS:
+// var_dump($resultado);exit;
+
 ?>
 
 <!DOCTYPE html>
@@ -49,22 +50,26 @@ $resultado = mysqli_query($conexao, $sql);
                 <?php
 
                 while ($produto = mysqli_fetch_array($resultado)) {
-
+                    // var_dump($produto);exit;
                     $valor = $produto["valor"];
                     $desconto = $produto["desconto"];
 
-                    $valorDesconto;
+
+                    $valorDesconto = 0;
 
                     if ($desconto > 0) {
 
                         $valorDesconto = ($desconto / 100) * $valor;
-
-                        $valor -= $valorDesconto;
                     }
 
                     $qtdParcelas = $valor > 1000 ? 12 : 6;
 
-                    $valorParcela = number_format($valor / $qtdParcelas, 2, ',', '.');
+                    $valorComDesconto = $valor - $valorDesconto;
+                    // $valor = $valor - $valorDesconto;
+                    // $valor -= $valorDesconto;
+
+                    $valorParcela = $valorComDesconto / $qtdParcelas;
+
                 ?>
 
                     <article class="card-produto">
@@ -75,26 +80,26 @@ $resultado = mysqli_query($conexao, $sql);
                         </div>
 
                         <figure>
-                            <img src="fotos/<?= $produto["imagem"] ?>" />
+                            <img src="fotos/<?php echo $produto["imagem"] ?>" />
                         </figure>
 
                         <section>
 
                             <span class="preco">
-                                R$<?= number_format($valor, 2, ',', '.') ?>
-                                <em><?= $desconto ?>% off</em>
+                                R$ <?php echo number_format($valorComDesconto, 2, ',', '.'); ?>
+                                <em> <?php echo $desconto; ?> % off</em>
                             </span>
 
                             <span class="parcelamento">ou em
                                 <em>
-                                    <?= $qtdParcelas ?>X de R$<?= $valorParcela ?> sem juros
+                                    <?php echo $qtdParcelas; ?> x R$ <?php echo number_format($valorParcela, 2, ",", ".") ?> sem juros
                                 </em>
                             </span>
 
-                            <span class="descricao"><?= $produto["1"] ?></span>
+                            <span class="descricao"><?php echo $produto["1"] ?></span>
 
                             <span class="categoria">
-                                <em><?= $produto["descricao"] ?></em>
+                                <em><?php echo $produto["descricao"]; ?></em>
                             </span>
 
                     </article>
@@ -102,6 +107,7 @@ $resultado = mysqli_query($conexao, $sql);
                 <?php } ?>
 
         </section>
+
         <!-- LISTAGEM DE PRODUTOS (FIM) -->
 
         <!-- FORM USADO PARA A EXCLUSÃO DE PRODUTOS -->
