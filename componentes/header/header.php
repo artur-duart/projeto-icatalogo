@@ -9,7 +9,7 @@ $raiz = "/artur/aula17/senai-icatalogo-mysqli-alunos";
 <header class="header">
 
     <figure>
-        <a href="../produtos">
+        <a href="<?=$raiz?>/produtos">
             <img src="<?php echo $raiz ?>/imgs/logo2.png" />
         </a>
     </figure>
